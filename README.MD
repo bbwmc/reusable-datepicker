@@ -3,9 +3,9 @@ A Reusable datepicker for internal usage
 
 Requires:
 
-jQuery
+>jQuery
 
-momentjs
+>momentjs
 
-flatpickr
+>flatpickr
 
