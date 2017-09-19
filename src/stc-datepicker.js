@@ -1,5 +1,10 @@
 
-  var STC = STC ? STC : { Components: { } };
+  if(!STC) {
+    var STC = {}
+  }
+  if(!STC.hasOwnProperty('Components')) {
+    STC.Components = {};
+  }
   STC.Components.BookDatePicker = function(id) {
 
     var input   = document.getElementById(id)
