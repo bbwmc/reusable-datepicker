@@ -5,7 +5,7 @@
   if(!STC.hasOwnProperty('Components')) {
     STC.Components = {};
   }
-  STC.Components.BookDatePicker = function(id) {
+  STC.Components.BookDatePicker = function(id, options) {
 
     var input   = document.getElementById(id)
     var $input  = $('#' + id);
@@ -34,7 +34,7 @@
     var defaultDate       = [new Date(startDate.format('YYYY-MM-DD')), new Date(endDate.format('YYYY-MM-DD'))];
     var defaultDateString = (startDate.format('Do MMMM YYYY')) + " - " + (endDate.format('Do MMMM YYYY'));
     // input.value       = defaultDateString;
-    window.stc_datepicker    = flatpickr(input, {
+    window.stc_datepicker    = flatpickr(input, $.extend({
       defaultDate: defaultDate,
       locale: {
         rangeSeparator: ' - ',
@@ -57,5 +57,5 @@
           obj.close();
         }
       }
-    })
+    }, options)
   }
