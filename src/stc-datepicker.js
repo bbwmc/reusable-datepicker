@@ -1,5 +1,5 @@
 
-  if(!STC) {
+  if(typeof STC === 'undefined') {
     var STC = {}
   }
   if(!STC.hasOwnProperty('Components')) {
@@ -33,8 +33,7 @@
     var endDate           = moment().add(1, 'days').startOf('day');
     var defaultDate       = [new Date(startDate.format('YYYY-MM-DD')), new Date(endDate.format('YYYY-MM-DD'))];
     var defaultDateString = (startDate.format('Do MMMM YYYY')) + " - " + (endDate.format('Do MMMM YYYY'));
-    // input.value       = defaultDateString;
-    window.stc_datepicker    = flatpickr(input, $.extend({
+    window.stc_datepicker = flatpickr(input, $.extend({
       defaultDate: defaultDate,
       locale: {
         rangeSeparator: ' - ',
@@ -57,5 +56,5 @@
           obj.close();
         }
       }
-    }, options)
+    }, options));
   }
