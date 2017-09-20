@@ -5,13 +5,18 @@ if(typeof STC === 'undefined') {
 if(!STC.hasOwnProperty('Components')) {
   STC.Components = {};
 }
-STC.Components.BookDatePicker = function(selector, options) {
+STC.Components.BookDatePicker = function(selector, displayTitles, options, onChangeCallback) {
 
-  var momentLoaded = false;
+  var options = typeof options !== 'object' ? {} : options;
+  var momentLoaded    = false;
+  var flatpickrLoaded = false;
+  window.flatpickrAttempt = false;
+  window.momentAttempt = false;
   if(!window.jQuery) {
     throw "jQuery required for BookDatePicker to work"
   }
-  if(!window.moment) {
+  if(!window.moment && window.momentAttempt == false) {
+    window.momentAttempt = true;
     var script  = document.createElement('script');
     script.type = "text/javascript";
     script.src  = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js";
@@ -23,9 +28,22 @@ STC.Components.BookDatePicker = function(selector, options) {
     momentLoaded = true;
   }
 
-  if(!momentLoaded) {
+  if(!$.fn.flatpickr && window.flatpickrAttempt == false) {
+    window.flatpickrAttempt = true;
+      var scripttwo  = document.createElement('script');
+      scripttwo.type = "text/javascript";
+      scripttwo.src  = "https://unpkg.com/flatpickr";
+      scripttwo.onload = function() {
+        flatpickrLoaded = true;
+      }
+      document.getElementsByTagName('head')[0].appendChild(scripttwo);
+  } else {
+    flatpickrLoaded = true;
+  }
+
+  if(!momentLoaded || !flatpickrLoaded) {
     setTimeout(function() {
-      STC.Components.BookDatePicker(selector, options)
+      STC.Components.BookDatePicker(selector, displayTitles, options)
     }, 700);
 
     return false;
@@ -35,8 +53,19 @@ STC.Components.BookDatePicker = function(selector, options) {
 
   $input.each(function(index) {
 
-    var startDate         = moment().startOf('day');
-    var endDate           = moment().add(1, 'days').startOf('day');
+    var startDate = moment(options.startDate)
+    var endDate   = moment(options.endDate)
+
+    var startDate = startDate.startOf('day');
+    if(!startDate.isValid()) {
+      startDate = moment()
+    }
+
+    var endDate = endDate.startOf('day');
+    if(!endDate.isValid()) {
+      endDate = moment().add(1, 'days')
+    }
+
     var defaultDate       = [new Date(startDate.format('YYYY-MM-DD')), new Date(endDate.format('YYYY-MM-DD'))];
     var defaultDateString = (startDate.format('Do MMMM YYYY')) + " - " + (endDate.format('Do MMMM YYYY'));
     var $this             = $(this);
@@ -48,9 +77,17 @@ STC.Components.BookDatePicker = function(selector, options) {
     $form.on('click', function() {
       stc_datepicker.toggle();
     })
-    $this.css({width: '100%', height: 0, border: 0, margin: 0, padding: 0, display: 'block'});
+    $this.css({
+      width: '100%', height: 0,
+      border: 0, margin: 0,
+      padding: 0, display: 'block',
+      visibility: 'hidden'
+    });
     $this.wrap($form);
     var $wrapper = $this.closest('.stc-datepicker');
+    if(displayTitles === false) {
+      $wrapper.addClass('stc-datepicker--notitles')
+    }
     $start.insertBefore($this);
     $end.insertAfter($start);
 
@@ -119,6 +156,9 @@ STC.Components.BookDatePicker = function(selector, options) {
           stc_datepicker.set('minDate', startDate.toDate());
           stc_datepicker.set('maxDate', null);
           obj.close();
+        }
+        if(typeof onChangeCallback == "function") {
+          onChangeCallback.call(this, result);
         }
       }
     }, options));

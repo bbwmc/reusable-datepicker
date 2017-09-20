@@ -1,19 +1,20 @@
-.stc-datepicker:before {
-  content: "Start Date";
+
+.stc-datepicker:before, .stc-datepicker:after {
+  top: -30px;
   position: absolute;
-  top: -25px;
+}
+.stc-datepicker:before {
+  content: "Arrival Date";
   left: 10px;
 }
 .stc-datepicker:after {
-  content: "End Date";
-  position: absolute;
-  top: -25px;
+  content: "Departure Date";
   right: 10px;
 }
 
 .stc-datepicker__date {
   display: inline-block;
-  margin: 10px 8px;
+  margin: 0 8px;
 }
 
 .stc-datepicker__end {
@@ -27,12 +28,19 @@
 .stc-datepicker {
   /* Important */
   position: relative;
-  margin-top: 30px;
+  margin-top: 25px;
   width: 100%;
   /* Style */
   cursor: pointer;
+  background: white;
   border: 1px solid #d6d6d6;
   color: #6b6b6b;
   font-family: "open sans";
   font-size: 10pt;
+  text-align: left;
+  height: 36px;
+  line-height: 36px;
+}
+.stc-datepicker--notitles {
+  margin-top: 0;
 }
