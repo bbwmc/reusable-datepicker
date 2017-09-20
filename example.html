@@ -2,25 +2,27 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="src/stc-datepicker.css">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://unpkg.com/flatpickr"></script>
   <script src="src/stc-datepicker.js"></script>
-  <script>
-    $(function() {
-      STC.Components.BookDatePicker('date_range')
-    });
-  </script>
+  <style>
+
+  </style>
 </head>
 <body>
   <form method="post" action="">
-    <select></select>
-
-    <div class="container">
-      <input type="text" id="date_range" name="date_range" value="">
-    </div>
-
-    <input type="submit">
+      <input type="text" class="date_range" name="date_range" value="">
   </form>
+  <br><br><br>
+
+    <form method="post" action="">
+      <input type="text" class="date_range" name="date_range" value="">
+    </form>
+
+  <script>
+      STC.Components.BookDatePicker('.date_range')
+  </script>
 </body>
 </html>
