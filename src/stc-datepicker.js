@@ -43,7 +43,7 @@ STC.Components.BookDatePicker = function(selector, displayTitles, options, onCha
 
   if(!momentLoaded || !flatpickrLoaded) {
     setTimeout(function() {
-      STC.Components.BookDatePicker(selector, displayTitles, options)
+      STC.Components.BookDatePicker(selector, displayTitles, options, onChangeCallback)
     }, 700);
 
     return false;
@@ -56,23 +56,22 @@ STC.Components.BookDatePicker = function(selector, displayTitles, options, onCha
     var startDate = moment(options.startDate)
     var endDate   = moment(options.endDate)
 
-    var startDate = startDate.startOf('day');
     if(!startDate.isValid()) {
       startDate = moment()
     }
+    startDate = startDate.startOf('day');
 
-    var endDate = endDate.startOf('day');
     if(!endDate.isValid()) {
       endDate = moment().add(1, 'days')
     }
+    endDate = endDate.startOf('day');
 
     var defaultDate       = [new Date(startDate.format('YYYY-MM-DD')), new Date(endDate.format('YYYY-MM-DD'))];
     var defaultDateString = (startDate.format('Do MMMM YYYY')) + " - " + (endDate.format('Do MMMM YYYY'));
     var $this             = $(this);
-
     var $start = $('<span class="stc-datepicker__start stc-datepicker__date">'+ startDate.format('Do MMMM YYYY') +'</span>');
-    var $end  = $('<span class="stc-datepicker__end stc-datepicker__date">'+ endDate.format('Do MMMM YYYY') +'</span>');
-    var $form = $('<div class="stc-datepicker"></div>');
+    var $end   = $('<span class="stc-datepicker__end stc-datepicker__date">'+ endDate.format('Do MMMM YYYY') +'</span>');
+    var $form  = $('<div class="stc-datepicker"></div>');
 
     $form.on('click', function() {
       stc_datepicker.toggle();
@@ -134,7 +133,6 @@ STC.Components.BookDatePicker = function(selector, displayTitles, options, onCha
       mode: "range",
       minDate:  new Date(moment().format('YYYY-MM-DD')),
       onChange: function(result, text, obj) {
-
         if(result.length == 0) {
           $start.html("");
           $end.html("");
@@ -153,12 +151,12 @@ STC.Components.BookDatePicker = function(selector, displayTitles, options, onCha
           $wrapper.removeClass('stc-datepicker--oneoftwo');
           $start.html(moment(result[0]).format('Do MMMM YYYY'));
           $end.html(moment(result[1]).format('Do MMMM YYYY'));
-          stc_datepicker.set('minDate', startDate.toDate());
+          stc_datepicker.set('minDate', moment().startOf('day').toDate());
           stc_datepicker.set('maxDate', null);
           obj.close();
         }
         if(typeof onChangeCallback == "function") {
-          onChangeCallback.call(this, result);
+          onChangeCallback.call(this, $parent, result);
         }
       }
     }, options));
